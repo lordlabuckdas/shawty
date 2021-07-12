@@ -18,6 +18,9 @@
 	{{ if .shortURL }}
 	<strong>your shortened url: {{ .shortURL }}</strong>
 	{{ end }}
+	{{ if .error }}
+	<strong>error: {{ .error }}</strong>
+	{{ end }}
 </body>
 
 </html>
