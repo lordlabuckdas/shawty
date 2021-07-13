@@ -4,18 +4,19 @@ import (
 	"context"
 	"log"
 	"net/url"
+	"os"
 	"time"
 
 	"github.com/google/uuid"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/favicon"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/template/html"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type URL struct {
@@ -23,12 +24,16 @@ type URL struct {
 	LongURL  string `json:"long_url" bson:"long_url"`
 }
 
-var serverURL string = "http://127.0.0.1:3000"
+var (
+	serverURL string = "http://" + os.Getenv("HOST") + ":" + os.Getenv("PORT")
+	mongoDBURI string = os.Getenv("MONGO_URI")
+)
 
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx)
+	clientOpts := options.Client().ApplyURI(mongoDBURI)
+	client, err := mongo.Connect(ctx, clientOpts)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -38,19 +43,15 @@ func main() {
 		Views: engine,
 	})
 	app.Use(logger.New())
-	app.Use(favicon.New(favicon.Config{
-		Next: func(c *fiber.Ctx) bool {
-			return true
-		},
-	}))
+	app.Static("/", "./web")
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("index", fiber.Map{})
+		return c.Render("home", fiber.Map{})
 	})
 	app.Post("/", func(c *fiber.Ctx) error {
 		longURL, err := url.Parse(c.FormValue("longURL"))
 		// log.Println("URL received: "+ longURL.String())
 		if err != nil {
-			return c.Status(400).Render("index", fiber.Map{
+			return c.Status(400).Render("home", fiber.Map{
 				"error": "400 - Invalid URL",
 			})
 		}
@@ -64,19 +65,19 @@ func main() {
 		}
 		bsonURL, err := bson.Marshal(url)
 		if err != nil {
-			return c.Status(500).Render("index", fiber.Map{
+			return c.Status(500).Render("home", fiber.Map{
 				"error": "500 - Error marshalling to BSON",
 			})
 		}
 		// log.Println("Marshalled")
 		_, err = coll.InsertOne(c.Context(), bsonURL)
 		if err != nil {
-			return c.Status(500).Render("index", fiber.Map{
+			return c.Status(500).Render("home", fiber.Map{
 				"error": "500 - Error adding URL to the DB",
 			})
 		}
 		// log.Println("Added to DB")
-		return c.Render("index", fiber.Map{
+		return c.Render("home", fiber.Map{
 			"longURL":  longURL,
 			"shortURL": serverURL + "/" + url.ShortURL,
 		})
@@ -92,11 +93,11 @@ func main() {
 		// log.Println("Executed Search")
 		if err != nil {
 			if err == mongo.ErrNoDocuments {
-				return c.Status(404).Render("index", fiber.Map{
+				return c.Status(404).Render("home", fiber.Map{
 					"error": "404 - Page Not Found",
 				})
 			} else {
-				return c.Status(400).Render("index", fiber.Map{
+				return c.Status(400).Render("home", fiber.Map{
 					"error": "400 - Bad Request",
 				})
 			}

@@ -1,0 +1,35 @@
+version: "3.9"
+
+networks:
+  net:
+
+services:
+
+  # mongodb database
+  db:
+    container_name: shawty_db
+    image: mongo
+    volumes:
+      - ./mongo_data:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - net
+
+  # shawty server
+  server:
+    container_name: shawty_server
+    build: .
+    command: go run shawty.go
+    environment:
+      - PORT=5000
+      - HOST=0.0.0.0
+      - MONGO_URI=mongodb://db/
+    # volumes:
+    #   - ./:/app
+    ports:
+      - 5000:5000
+    networks:
+      - net
+    depends_on:
+      - db
