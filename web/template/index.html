@@ -2,63 +2,62 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
-	<link rel="stylesheet" href="bootstrap.min.css">
-	<title>shawty - url shortener</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <title>shawty - url shortener</title>
 </head>
 
 <body>
-	<div class="intro py-3 text-center">
-		<div class="container">
-			<h1 class="text-primary display-1 my-4">
-				Shawty
-			</h1>
-			<h5 class="text-secondary display-5">
-				a simple URL Shortener
-			</h5>
-		</div>
-	</div>
-	<div class="py-4 mx-auto">
-		<div class="container text-center col-6 col-md-12 col-sm-12 mx-auto">
-			<form action="/" class="mx-auto" method="POST">
-				<div class="row align-items mx-auto">
-					<div class="col-3"></div>
-					<div class="col-auto">
-						<label for="longURL" class="col-form-label text-primary">
-							<h5>URL</h5>
-						</label>
-					</div>
-					<div class="col-4">
-						<input type="text" class="form-control" id="longURL" name="longURL" value="{{ .longURL }}">
-					</div>
-					<div class="col-auto">
-						<button type="submit" class="float-right btn btn-primary" value="submit">Shorten</button>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
-	{{ if .shortURL }}
-	<div class="card border-primary text-center mx-auto" style="width: 50rem;">
-		<div class="card-body justify-content-center">
-			<b class="text-primary">Shortened URL: </b><a class="text-success" href="{{ .shortURL }}">{{ .shortURL
-				}}</a>
-			<!-- <button type="button" class="btn btn-outline-primary btn-clipboard">Copy</button> -->
-		</div>
-	</div>
-	{{ end }}
-	{{ if .error }}
-	<div class="card border-danger text-center mx-auto" style="width: 40rem;">
-		<div class="card-body justify-content-center">
-			<b class="text-danger">Error: {{ .error }}</b>
-			<!-- <button type="button" class="btn btn-outline-primary btn-clipboard">Copy</button> -->
-		</div>
-	</div>
-	<strong>error: </strong>
-	{{ end }}
+  <div class="intro py-3 text-center">
+    <div class="container">
+      <h1 class="text-primary display-1 my-4">
+        Shawty
+      </h1>
+      <h5 class="text-secondary display-5">
+        a simple URL Shortener
+      </h5>
+    </div>
+  </div>
+  <div class="py-4 mx-auto">
+    <div class="container text-center col-6 col-md-12 col-sm-12 mx-auto">
+      <form class="mx-auto" id="urlForm">
+        <div class="row align-items mx-auto">
+          <div class="col-3"></div>
+          <div class="col-auto">
+            <label for="longURL" class="col-form-label text-primary">
+              <h5>URL</h5>
+            </label>
+          </div>
+          <div class="col-4">
+            <input type="text" class="form-control" id="longURL" name="longURL" value="{{ .longURL }}">
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="float-right btn btn-primary" value="shorten">Shorten</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  {{ if .shortURL }}
+  <div class="card border-primary text-center mx-auto" style="width: 50rem;">
+    <div class="card-body justify-content-center">
+      <b class="text-primary">Shortened URL: </b><a class="text-success" href="{{ .shortURL }}">{{ .shortURL }}</a>
+      <!-- <button type="button" class="btn btn-outline-primary btn-clipboard">Copy</button> -->
+    </div>
+  </div>
+  {{ end }}
+  {{ if .error }}
+  <div class="card border-danger text-center mx-auto" style="width: 40rem;">
+    <div class="card-body justify-content-center">
+      <b class="text-danger">Error: {{ .error }}</b>
+    </div>
+  </div>
+  <strong>error: </strong>
+  {{ end }}
+  <script src="script.js"></script>
 </body>
 
 </html>
