@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	app        *fiber.App
+	app *fiber.App
 )
 
 func main() {

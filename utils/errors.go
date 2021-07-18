@@ -8,7 +8,7 @@ import (
 
 type URLError struct {
 	Code int
-	Msg string
+	Msg  string
 }
 
 func (err *URLError) Error() string {

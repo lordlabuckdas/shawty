@@ -19,7 +19,7 @@ type URL struct {
 }
 
 var (
-	urlsDB     *mongo.Collection
+	urlsDB *mongo.Collection
 )
 
 func ClientsInit() error {
@@ -30,7 +30,7 @@ func ClientsInit() error {
 	if err != nil {
 		return &utils.URLError{
 			Code: 500,
-			Msg: "Cannot establish connection to MongoDB",
+			Msg:  "Cannot establish connection to MongoDB",
 		}
 	}
 	urlsDB = client.Database(config.DatabaseName).Collection(config.CollectionName)

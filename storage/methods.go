@@ -14,7 +14,7 @@ import (
 
 func Insert(shortURL string, longURL string, c *fiber.Ctx) error {
 	urlItem := &URL{
-		LongURL: longURL,
+		LongURL:  longURL,
 		ShortURL: shortURL,
 	}
 	utils.InfoLogger.Println("Inserting " + shortURL + " and " + longURL)
@@ -23,7 +23,7 @@ func Insert(shortURL string, longURL string, c *fiber.Ctx) error {
 		utils.ErrorLogger.Println(err)
 		return &utils.URLError{
 			Code: 500,
-			Msg: "Error marshalling to BSON",
+			Msg:  "Error marshalling to BSON",
 		}
 	}
 	utils.InfoLogger.Println("Successfully marshalled")
@@ -32,7 +32,7 @@ func Insert(shortURL string, longURL string, c *fiber.Ctx) error {
 		utils.ErrorLogger.Println(err)
 		return &utils.URLError{
 			Code: 500,
-			Msg: "Error marshalling to BSON",
+			Msg:  "Error marshalling to BSON",
 		}
 	}
 	utils.InfoLogger.Println("Successfully inserted into DB")
@@ -51,12 +51,12 @@ func Find(shortURL string, c *fiber.Ctx) (string, error) {
 		if err == mongo.ErrNoDocuments {
 			return "", &utils.URLError{
 				Code: 404,
-				Msg: "Page not found!",
+				Msg:  "Page not found!",
 			}
 		}
 		return "", &utils.URLError{
 			Code: 500,
-			Msg: "Internal Error",
+			Msg:  "Internal Error",
 		}
 	}
 	utils.InfoLogger.Println("URL found in DB")

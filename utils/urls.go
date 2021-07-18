@@ -5,7 +5,6 @@ import (
 	"encoding/hex"
 )
 
-
 func ShortenURL(longURL string) (string, error) {
 	if len(longURL) == 0 {
 		return "", &URLError{400, "Invalid long URL - Length is 0"}

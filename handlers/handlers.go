@@ -23,7 +23,7 @@ func AddURL(c *fiber.Ctx) error {
 		utils.ErrorLogger.Println(err)
 		return utils.HandleError(c, &utils.URLError{
 			Code: 400,
-			Msg: "Invalid URL",
+			Msg:  "Invalid URL",
 		})
 	}
 	utils.InfoLogger.Println("URL received: " + longURL.String())
